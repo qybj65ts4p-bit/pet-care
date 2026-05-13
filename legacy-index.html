@@ -1,0 +1,1856 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>绒爪洗护 Pet Spa</title>
+  <style>
+    :root {
+      --bg: #f8f1e7;
+      --bg-soft: #fff8f0;
+      --ink: #1d2a2f;
+      --muted: #5f6c71;
+      --brand: #e78e4f;
+      --brand-deep: #c76436;
+      --accent: #88b8a5;
+      --card: rgba(255, 255, 255, 0.84);
+      --line: rgba(29, 42, 47, 0.08);
+      --shadow: 0 24px 60px rgba(76, 53, 35, 0.12);
+      --radius-lg: 28px;
+      --radius-md: 20px;
+      --radius-sm: 14px;
+      --container: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Trebuchet MS", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(231, 142, 79, 0.2), transparent 28%),
+        radial-gradient(circle at top right, rgba(136, 184, 165, 0.22), transparent 24%),
+        linear-gradient(180deg, #fffaf4 0%, #f7efdf 52%, #fff8ee 100%);
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .shell {
+      overflow: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    .shell::before,
+    .shell::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(8px);
+      z-index: 0;
+    }
+
+    .shell::before {
+      width: 320px;
+      height: 320px;
+      background: rgba(231, 142, 79, 0.12);
+      left: -120px;
+      top: 480px;
+    }
+
+    .shell::after {
+      width: 360px;
+      height: 360px;
+      background: rgba(136, 184, 165, 0.16);
+      right: -110px;
+      top: 820px;
+    }
+
+    .container {
+      width: min(calc(100% - 40px), var(--container));
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(255, 248, 240, 0.78);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.45);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 78px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-mark {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      background: linear-gradient(145deg, #edb17a, #de7742);
+      color: white;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 14px 28px rgba(199, 100, 54, 0.18);
+      font-size: 1.1rem;
+    }
+
+    .brand small {
+      display: block;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-top: 3px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .nav a {
+      position: relative;
+      transition: color 0.2s ease;
+    }
+
+    .nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 100%;
+      height: 2px;
+      border-radius: 999px;
+      background: var(--brand);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.2s ease;
+    }
+
+    .nav a:hover {
+      color: var(--ink);
+    }
+
+    .nav a:hover::after {
+      transform: scaleX(1);
+    }
+
+    .nav-toggle {
+      display: none;
+      border: 0;
+      background: rgba(255, 255, 255, 0.72);
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+    }
+
+    .nav-toggle span,
+    .nav-toggle::before,
+    .nav-toggle::after {
+      content: "";
+      display: block;
+      width: 18px;
+      height: 2px;
+      border-radius: 999px;
+      background: var(--ink);
+      margin: 0 auto;
+      transition: transform 0.22s ease, opacity 0.22s ease;
+    }
+
+    .nav-toggle::before {
+      transform: translateY(-5px);
+    }
+
+    .nav-toggle::after {
+      transform: translateY(5px);
+    }
+
+    .nav-toggle.is-open span {
+      opacity: 0;
+    }
+
+    .nav-toggle.is-open::before {
+      transform: translateY(2px) rotate(45deg);
+    }
+
+    .nav-toggle.is-open::after {
+      transform: translateY(0) rotate(-45deg);
+    }
+
+    .hero {
+      padding: 42px 0 32px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 38px;
+      align-items: center;
+    }
+
+    .hero-copy {
+      padding: 36px 0;
+      animation: rise 0.8s ease both;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(199, 100, 54, 0.14);
+      color: var(--brand-deep);
+      font-weight: 700;
+      box-shadow: 0 8px 18px rgba(199, 100, 54, 0.08);
+    }
+
+    .hero h1 {
+      margin: 18px 0 16px;
+      font-size: clamp(2.7rem, 5vw, 5rem);
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+      max-width: 11ch;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 54ch;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin: 28px 0 34px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 0 24px;
+      border-radius: 999px;
+      border: 0;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button-primary {
+      background: linear-gradient(135deg, var(--brand), var(--brand-deep));
+      color: white;
+      box-shadow: 0 18px 34px rgba(199, 100, 54, 0.22);
+    }
+
+    .button-secondary {
+      background: rgba(255, 255, 255, 0.75);
+      color: var(--ink);
+      border: 1px solid rgba(29, 42, 47, 0.08);
+      box-shadow: 0 14px 28px rgba(29, 42, 47, 0.08);
+    }
+
+    .hero-points {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .point {
+      padding: 18px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.74);
+      border: 1px solid rgba(255, 255, 255, 0.62);
+      box-shadow: var(--shadow);
+    }
+
+    .point strong {
+      display: block;
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+    }
+
+    .point span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .hero-card {
+      position: relative;
+      min-height: 640px;
+      border-radius: 34px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.55)),
+        linear-gradient(155deg, #f0d2b0, #d9f0e7);
+      border: 1px solid rgba(255, 255, 255, 0.65);
+      box-shadow: 0 30px 70px rgba(71, 46, 29, 0.16);
+      overflow: hidden;
+      animation: rise 1s ease 0.14s both;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: 20px;
+      border-radius: 28px;
+      border: 1px dashed rgba(255, 255, 255, 0.68);
+    }
+
+    .float-note {
+      position: absolute;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 18px 34px rgba(31, 38, 43, 0.12);
+      backdrop-filter: blur(12px);
+      line-height: 1.45;
+    }
+
+    .float-note strong {
+      display: block;
+      font-size: 1.04rem;
+      margin-bottom: 4px;
+    }
+
+    .float-note small {
+      color: var(--muted);
+    }
+
+    .float-note.one {
+      top: 32px;
+      left: 28px;
+    }
+
+    .float-note.two {
+      right: 28px;
+      bottom: 132px;
+    }
+
+    .pet-figure {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: min(92%, 520px);
+      transform: translateX(-50%);
+    }
+
+    .pet-figure svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .section {
+      padding: 54px 0;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 26px;
+    }
+
+    .section-head h2 {
+      margin: 0 0 10px;
+      font-size: clamp(2rem, 3vw, 3rem);
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+    }
+
+    .section-head p {
+      margin: 0;
+      max-width: 54ch;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .section-chip {
+      color: var(--brand-deep);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.78rem;
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+
+    .services {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .service-card,
+    .price-card,
+    .step,
+    .review,
+    .contact-card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(255, 255, 255, 0.62);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .service-card {
+      padding: 24px;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 28px 56px rgba(71, 46, 29, 0.14);
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 18px;
+      background: linear-gradient(145deg, rgba(231, 142, 79, 0.2), rgba(136, 184, 165, 0.2));
+      color: var(--brand-deep);
+      font-weight: 900;
+    }
+
+    .service-card h3,
+    .price-card h3,
+    .review h3,
+    .contact-card h3 {
+      margin: 0 0 10px;
+      font-size: 1.22rem;
+    }
+
+    .service-card p,
+    .price-card p,
+    .step p,
+    .review p,
+    .contact-card p,
+    .contact-item span {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .pricing {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .price-card {
+      padding: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .price-card.featured {
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 244, 231, 0.88)),
+        rgba(255, 255, 255, 0.84);
+      border-color: rgba(199, 100, 54, 0.2);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 32px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: rgba(231, 142, 79, 0.14);
+      color: var(--brand-deep);
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .price {
+      font-size: 2.8rem;
+      line-height: 1;
+      margin: 16px 0 10px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    .price small {
+      font-size: 0.95rem;
+      color: var(--muted);
+      font-weight: 700;
+      margin-left: 6px;
+      letter-spacing: 0;
+    }
+
+    .price-list {
+      list-style: none;
+      padding: 0;
+      margin: 22px 0 28px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .price-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+    }
+
+    .price-list li::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex: 0 0 auto;
+    }
+
+    .process {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .step {
+      padding: 26px;
+      position: relative;
+    }
+
+    .step-index {
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      color: var(--brand-deep);
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .step h3 {
+      margin: 0 0 10px;
+      font-size: 1.16rem;
+    }
+
+    .reviews-wrap {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .review-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .review {
+      padding: 24px;
+    }
+
+    .stars {
+      letter-spacing: 0.22em;
+      color: var(--brand);
+      font-size: 0.92rem;
+      margin-bottom: 14px;
+    }
+
+    .review-name {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 16px;
+      font-weight: 800;
+    }
+
+    .review-name::before {
+      content: "";
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, rgba(231, 142, 79, 0.35), rgba(136, 184, 165, 0.35));
+      display: inline-block;
+    }
+
+    .story-panel {
+      padding: 28px;
+      border-radius: 34px;
+      background:
+        linear-gradient(160deg, rgba(41, 63, 57, 0.92), rgba(68, 98, 89, 0.92)),
+        #26443d;
+      color: #f6f2e9;
+      box-shadow: 0 26px 54px rgba(24, 41, 36, 0.22);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .story-panel::after {
+      content: "";
+      position: absolute;
+      right: -40px;
+      bottom: -40px;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.14), transparent 70%);
+    }
+
+    .story-panel h3 {
+      margin: 0 0 10px;
+      font-size: 1.72rem;
+    }
+
+    .story-panel p {
+      color: rgba(246, 242, 233, 0.8);
+      line-height: 1.8;
+      margin: 0 0 22px;
+    }
+
+    .story-metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin: 28px 0 30px;
+    }
+
+    .metric {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 1.7rem;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .metric span {
+      color: rgba(246, 242, 233, 0.74);
+      line-height: 1.6;
+      font-size: 0.92rem;
+    }
+
+    .contact {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+    }
+
+    .contact-card {
+      padding: 30px;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .contact-item:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .contact-item strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .contact-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      background: linear-gradient(145deg, rgba(231, 142, 79, 0.18), rgba(136, 184, 165, 0.18));
+      color: var(--brand-deep);
+      font-weight: 900;
+    }
+
+    .hours-card {
+      padding: 30px;
+      border-radius: 34px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 248, 238, 0.76)),
+        rgba(255, 255, 255, 0.84);
+      border: 1px solid rgba(199, 100, 54, 0.14);
+      box-shadow: 0 26px 54px rgba(71, 46, 29, 0.12);
+    }
+
+    .schedule {
+      margin: 24px 0;
+      display: grid;
+      gap: 14px;
+    }
+
+    .schedule-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px dashed rgba(29, 42, 47, 0.12);
+      color: var(--muted);
+    }
+
+    .schedule-row strong {
+      color: var(--ink);
+    }
+
+    .cta-panel {
+      margin-top: 24px;
+      padding: 22px;
+      border-radius: 24px;
+      background: linear-gradient(145deg, rgba(231, 142, 79, 0.15), rgba(136, 184, 165, 0.14));
+    }
+
+    .cta-panel strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1.05rem;
+    }
+
+    .gallery-section {
+      padding-top: 34px;
+    }
+
+    .gallery-shell {
+      position: relative;
+      border-radius: 36px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 248, 238, 0.78)),
+        rgba(255, 255, 255, 0.84);
+      border: 1px solid rgba(255, 255, 255, 0.68);
+      box-shadow: 0 28px 60px rgba(71, 46, 29, 0.13);
+      overflow: hidden;
+    }
+
+    .gallery-stage {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      min-height: 320px;
+      background: #d9d2c7;
+    }
+
+    .gallery-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+
+    .gallery-slide.is-active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .gallery-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: auto 0 0 0;
+      padding: 32px;
+      background: linear-gradient(180deg, rgba(20, 29, 32, 0), rgba(20, 29, 32, 0.78));
+      color: #fff8ef;
+    }
+
+    .gallery-overlay h3 {
+      margin: 0 0 10px;
+      font-size: clamp(1.4rem, 2.2vw, 2rem);
+      line-height: 1.08;
+    }
+
+    .gallery-overlay p {
+      margin: 0;
+      max-width: 52ch;
+      color: rgba(255, 248, 239, 0.82);
+      line-height: 1.75;
+    }
+
+    .gallery-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 20px 24px 24px;
+    }
+
+    .gallery-nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .gallery-button {
+      width: 48px;
+      height: 48px;
+      border: 0;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.82);
+      color: var(--ink);
+      box-shadow: 0 14px 30px rgba(29, 42, 47, 0.12);
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .gallery-button:hover {
+      transform: translateY(-2px);
+      background: white;
+    }
+
+    .gallery-dots {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .gallery-dot {
+      width: 12px;
+      height: 12px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(29, 42, 47, 0.18);
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .gallery-dot.is-active {
+      background: var(--brand);
+      transform: scale(1.18);
+    }
+
+    .gallery-caption {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .map-section {
+      padding-top: 20px;
+    }
+
+    .map-layout {
+      display: grid;
+      grid-template-columns: 0.92fr 1.08fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .map-info,
+    .map-visual {
+      border-radius: 34px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 248, 238, 0.8)),
+        rgba(255, 255, 255, 0.84);
+      border: 1px solid rgba(255, 255, 255, 0.66);
+      box-shadow: 0 28px 60px rgba(71, 46, 29, 0.12);
+      overflow: hidden;
+    }
+
+    .map-info {
+      padding: 30px;
+    }
+
+    .map-info h3,
+    .map-visual h3 {
+      margin: 0 0 10px;
+      font-size: 1.34rem;
+    }
+
+    .map-info p,
+    .map-visual p,
+    .map-note,
+    .map-list span {
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .map-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: rgba(231, 142, 79, 0.14);
+      color: var(--brand-deep);
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    .map-address {
+      margin: 18px 0 22px;
+      padding: 20px 22px;
+      border-radius: 24px;
+      background: linear-gradient(145deg, rgba(231, 142, 79, 0.13), rgba(136, 184, 165, 0.16));
+    }
+
+    .map-address strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1.18rem;
+    }
+
+    .map-list {
+      display: grid;
+      gap: 16px;
+      margin: 22px 0 28px;
+    }
+
+    .map-list-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .map-list-item:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .map-list-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      background: linear-gradient(145deg, rgba(231, 142, 79, 0.2), rgba(136, 184, 165, 0.2));
+      color: var(--brand-deep);
+      font-weight: 900;
+    }
+
+    .map-list strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .map-note {
+      font-size: 0.92rem;
+    }
+
+    .map-copy {
+      min-width: 134px;
+    }
+
+    .map-visual {
+      padding: 22px;
+      position: relative;
+    }
+
+    .map-stage {
+      border-radius: 28px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #f3f7fb, #e7eef6);
+      border: 1px solid rgba(255, 255, 255, 0.62);
+    }
+
+    .pet-route-map {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .map-legend {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 18px 4px 2px;
+    }
+
+    .map-legend p {
+      margin: 0;
+    }
+
+    .legend-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.76);
+      color: var(--ink);
+      box-shadow: 0 10px 24px rgba(29, 42, 47, 0.08);
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    .footer {
+      padding: 18px 0 44px;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: center;
+      padding-top: 18px;
+      border-top: 1px solid rgba(29, 42, 47, 0.08);
+    }
+
+    .floating-book {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 12;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 54px;
+      padding: 0 20px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-deep));
+      color: white;
+      font-weight: 800;
+      box-shadow: 0 20px 38px rgba(199, 100, 54, 0.26);
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .hero-grid,
+      .reviews-wrap,
+      .contact,
+      .map-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .services,
+      .process {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .pricing {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-card {
+        min-height: 560px;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .nav-toggle {
+        display: inline-block;
+      }
+
+      .nav {
+        position: absolute;
+        left: 20px;
+        right: 20px;
+        top: calc(100% + 8px);
+        display: grid;
+        gap: 12px;
+        padding: 18px;
+        border-radius: 22px;
+        background: rgba(255, 248, 240, 0.96);
+        box-shadow: 0 24px 40px rgba(71, 46, 29, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.82);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+      }
+
+      .nav.is-open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .hero h1 {
+        max-width: none;
+      }
+
+      .hero-points,
+      .review-grid,
+      .story-metrics {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .gallery-controls {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .map-legend {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        width: min(calc(100% - 28px), var(--container));
+      }
+
+      .hero {
+        padding-top: 24px;
+      }
+
+      .topbar-inner {
+        min-height: 70px;
+      }
+
+      .services,
+      .process {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-card {
+        min-height: 500px;
+      }
+
+      .float-note {
+        position: static;
+        margin: 18px;
+      }
+
+      .float-note.two {
+        margin-top: 0;
+      }
+
+      .pet-figure {
+        width: min(100%, 420px);
+      }
+
+      .price {
+        font-size: 2.3rem;
+      }
+
+      .gallery-stage {
+        min-height: 260px;
+      }
+
+      .gallery-overlay {
+        padding: 22px 18px;
+      }
+
+      .gallery-controls {
+        padding: 18px;
+      }
+
+      .map-info,
+      .map-visual {
+        padding: 20px;
+      }
+
+      .map-address {
+        padding: 18px;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .floating-book {
+        left: 14px;
+        right: 14px;
+        bottom: 14px;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <a class="brand" href="#home" aria-label="绒爪洗护首页">
+          <span class="brand-mark">P</span>
+          <span>
+            绒爪洗护
+            <small>Pet Spa & Grooming</small>
+          </span>
+        </a>
+        <button class="nav-toggle" type="button" aria-label="打开导航" aria-expanded="false" aria-controls="site-nav">
+          <span></span>
+        </button>
+        <nav class="nav" id="site-nav">
+          <a href="#services">服务项目</a>
+          <a href="#pricing">套餐价格</a>
+          <a href="#process">护理流程</a>
+          <a href="#reviews">用户评价</a>
+          <a href="#contact">到店预约</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="home">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <span class="eyebrow">城市宠物精致洗护体验</span>
+            <h1>把洗澡这件小事，做成宠物最安心的一次放松。</h1>
+            <p>绒爪洗护为猫咪和狗狗提供温和清洁、毛发梳理、皮肤护理与造型修剪。我们关注的不只是“洗干净”，更是让每一次到店都舒适、稳定、值得信赖。</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#contact">立即预约洗护</a>
+              <a class="button button-secondary" href="#pricing">查看套餐价格</a>
+            </div>
+            <div class="hero-points">
+              <article class="point">
+                <strong>低敏产品</strong>
+                <span>精选温和洗护配方，适合敏感肌宠物日常清洁。</span>
+              </article>
+              <article class="point">
+                <strong>分区洗护</strong>
+                <span>猫狗动线分开，减少陌生环境造成的紧张反应。</span>
+              </article>
+              <article class="point">
+                <strong>过程可视</strong>
+                <span>护理步骤透明可沟通，接送前后状态一目了然。</span>
+              </article>
+            </div>
+          </div>
+
+          <div class="hero-card" aria-hidden="true">
+            <div class="float-note one">
+              <strong>一宠一护</strong>
+              <small>洗护工具独立消毒，护理记录全程留档。</small>
+            </div>
+            <div class="float-note two">
+              <strong>首次到店礼包</strong>
+              <small>新客可享基础洗护九折与毛发检测。</small>
+            </div>
+            <div class="pet-figure">
+              <svg viewBox="0 0 620 620" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="宠物洗护插画">
+                <defs>
+                  <linearGradient id="foam" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+                    <stop offset="100%" stop-color="#f4efe7" stop-opacity="0.85" />
+                  </linearGradient>
+                  <linearGradient id="fur" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#d39a5f" />
+                    <stop offset="100%" stop-color="#bf7642" />
+                  </linearGradient>
+                </defs>
+                <ellipse cx="310" cy="565" rx="205" ry="30" fill="rgba(41, 63, 57, 0.12)"/>
+                <path d="M176 407c0-75 60-138 134-138s134 63 134 138v70H176v-70Z" fill="url(#fur)"/>
+                <circle cx="248" cy="239" r="74" fill="url(#fur)"/>
+                <circle cx="368" cy="239" r="74" fill="url(#fur)"/>
+                <path d="M230 198c-18-48 2-92 51-103-4 35 22 66 54 76-27 19-73 31-105 27Z" fill="#b16638"/>
+                <path d="M386 198c18-48-2-92-51-103 4 35-22 66-54 76 27 19 73 31 105 27Z" fill="#b16638"/>
+                <circle cx="308" cy="271" r="118" fill="url(#fur)"/>
+                <ellipse cx="308" cy="317" rx="88" ry="73" fill="#f2ddc8"/>
+                <circle cx="266" cy="279" r="12" fill="#26353a"/>
+                <circle cx="350" cy="279" r="12" fill="#26353a"/>
+                <path d="M300 298c4-8 13-13 22-13s18 5 22 13c-7 10-16 16-22 16s-15-6-22-16Z" fill="#26353a"/>
+                <path d="M274 332c18 22 60 22 78 0" stroke="#a5603c" stroke-width="8" stroke-linecap="round" fill="none"/>
+                <ellipse cx="188" cy="421" rx="32" ry="72" fill="url(#fur)"/>
+                <ellipse cx="430" cy="421" rx="32" ry="72" fill="url(#fur)"/>
+                <ellipse cx="246" cy="456" rx="28" ry="80" fill="url(#fur)"/>
+                <ellipse cx="372" cy="456" rx="28" ry="80" fill="url(#fur)"/>
+                <ellipse cx="182" cy="501" rx="28" ry="14" fill="#845133"/>
+                <ellipse cx="434" cy="501" rx="28" ry="14" fill="#845133"/>
+                <ellipse cx="246" cy="531" rx="24" ry="12" fill="#845133"/>
+                <ellipse cx="372" cy="531" rx="24" ry="12" fill="#845133"/>
+                <circle cx="220" cy="182" r="30" fill="url(#foam)"/>
+                <circle cx="258" cy="162" r="44" fill="url(#foam)"/>
+                <circle cx="300" cy="151" r="38" fill="url(#foam)"/>
+                <circle cx="342" cy="160" r="40" fill="url(#foam)"/>
+                <circle cx="392" cy="182" r="32" fill="url(#foam)"/>
+                <circle cx="450" cy="244" r="22" fill="url(#foam)"/>
+                <circle cx="470" cy="282" r="14" fill="url(#foam)"/>
+                <circle cx="160" cy="248" r="22" fill="url(#foam)"/>
+                <circle cx="146" cy="288" r="14" fill="url(#foam)"/>
+                <path d="M494 120c24 0 43 19 43 43v58h-20v-36h-46c-21 0-38-17-38-38v-27h61Z" fill="#88b8a5"/>
+                <rect x="498" y="172" width="12" height="66" rx="6" fill="#88b8a5"/>
+                <path d="M465 223c18 0 36 13 45 27-16 17-39 28-65 28-13 0-25-3-36-9 10-28 31-46 56-46Z" fill="#7aaba0" opacity="0.9"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="services">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="section-chip">Services</span>
+              <h2>围绕舒适感设计的洗护项目</h2>
+            </div>
+            <p>从基础清洁到精修护理，每项服务都按照宠物体型、毛发长度和情绪状态灵活调整，让洗护过程更稳、更顺、更安心。</p>
+          </div>
+          <div class="services">
+            <article class="service-card">
+              <div class="service-icon">01</div>
+              <h3>基础洗护</h3>
+              <p>包含梳毛、清耳、修甲、温和洗浴与吹干整理，适合日常到店清洁与气味护理。</p>
+            </article>
+            <article class="service-card">
+              <div class="service-icon">02</div>
+              <h3>深层护理</h3>
+              <p>针对打结毛发、换毛期与皮肤敏感宠物，增加润护、毛结疏通与局部修整。</p>
+            </article>
+            <article class="service-card">
+              <div class="service-icon">03</div>
+              <h3>造型修剪</h3>
+              <p>根据宠物脸型与日常打理习惯做精修轮廓，清爽耐看，也便于居家维护。</p>
+            </article>
+            <article class="service-card">
+              <div class="service-icon">04</div>
+              <h3>猫咪安抚护理</h3>
+              <p>轻声安抚、缩短等待时间，采用更柔和节奏完成洗护，减少应激与抗拒。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="pricing">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="section-chip">Pricing</span>
+              <h2>清晰透明的套餐价格</h2>
+            </div>
+            <p>以下为常见体型参考价，具体费用会根据宠物毛量、打结程度和服务内容微调，到店前可先沟通估价。</p>
+          </div>
+          <div class="pricing">
+            <article class="price-card">
+              <span class="badge">小体型日常洗护</span>
+              <h3>轻松焕新套餐</h3>
+              <div class="price">¥128<small>/次起</small></div>
+              <p>适合小型犬、短毛猫等日常清洁频率较高的宠物。</p>
+              <ul class="price-list">
+                <li>基础洗护与吹整</li>
+                <li>耳部清洁与修甲</li>
+                <li>足底与腹底简单修剪</li>
+                <li>护理过程反馈建议</li>
+              </ul>
+              <a class="button button-secondary" href="#contact">预约这项服务</a>
+            </article>
+            <article class="price-card featured">
+              <span class="badge">门店热选</span>
+              <h3>绒感深护套餐</h3>
+              <div class="price">¥198<small>/次起</small></div>
+              <p>适合长毛、换毛期或需要更细致整理的宠物，也是门店里最受欢迎的到店选择。</p>
+              <ul class="price-list">
+                <li>深层清洁与柔顺护理</li>
+                <li>轻度毛结疏通</li>
+                <li>面部与尾部精细整理</li>
+                <li>基础皮毛状态评估</li>
+              </ul>
+              <a class="button button-primary" href="#contact">优先预约热选套餐</a>
+            </article>
+            <article class="price-card">
+              <span class="badge">精修造型</span>
+              <h3>高级造型套餐</h3>
+              <div class="price">¥268<small>/次起</small></div>
+              <p>适合需要整体修毛、造型整理和拍照出片感的宠物。</p>
+              <ul class="price-list">
+                <li>全套洗护与深润护理</li>
+                <li>全身精修造型</li>
+                <li>局部细节修整</li>
+                <li>造型维护建议</li>
+              </ul>
+              <a class="button button-secondary" href="#contact">咨询造型预约</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="process">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="section-chip">Process</span>
+              <h2>从接待到离店，每一步都温柔有序</h2>
+            </div>
+            <p>我们希望主人知道宠物在店里经历了什么，也希望宠物知道这里是安全可预测的环境。</p>
+          </div>
+          <div class="process">
+            <article class="step">
+              <span class="step-index">STEP 01</span>
+              <h3>到店评估</h3>
+              <p>查看毛发、皮肤、打结与情绪状态，确认今天更适合基础洗护还是加强护理。</p>
+            </article>
+            <article class="step">
+              <span class="step-index">STEP 02</span>
+              <h3>分区准备</h3>
+              <p>根据猫狗属性与体型安排独立区域，减少噪音和陌生刺激，提高适应速度。</p>
+            </article>
+            <article class="step">
+              <span class="step-index">STEP 03</span>
+              <h3>洗护护理</h3>
+              <p>使用温和洗剂完成清洁、吹整与毛发护理，中途根据反应及时放缓节奏。</p>
+            </article>
+            <article class="step">
+              <span class="step-index">STEP 04</span>
+              <h3>离店反馈</h3>
+              <p>交接护理结果与后续建议，让主人了解皮毛状态、在家梳理重点和复约周期。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="reviews">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="section-chip">Reviews</span>
+              <h2>被宠物和主人一起喜欢的洗护体验</h2>
+            </div>
+            <p>真实回头客最在意的，不只是洗得干净，而是宠物下次还愿意进门。</p>
+          </div>
+          <div class="reviews-wrap">
+            <div class="review-grid">
+              <article class="review">
+                <div class="stars">★★★★★</div>
+                <h3>猫咪终于不再抗拒洗澡</h3>
+                <p>我家布偶以前去别家总是很紧张，这次店员会提前安抚，也会讲解每个步骤，回来以后状态很轻松，毛也特别顺。</p>
+                <span class="review-name">周小姐 · 两只猫家庭</span>
+              </article>
+              <article class="review">
+                <div class="stars">★★★★★</div>
+                <h3>修得干净但不过分夸张</h3>
+                <p>比起花哨造型，我更喜欢这种自然耐看的修剪风格，耳朵、脸和脚边都很利落，回家也好打理。</p>
+                <span class="review-name">李先生 · 比熊主人</span>
+              </article>
+              <article class="review">
+                <div class="stars">★★★★★</div>
+                <h3>护理细节很加分</h3>
+                <p>店里会记录皮肤泛红和打结的位置，还会提醒我下次梳毛要注意哪里，感觉不是流水线洗澡，真的很用心。</p>
+                <span class="review-name">陈女士 · 金毛主人</span>
+              </article>
+              <article class="review">
+                <div class="stars">★★★★★</div>
+                <h3>预约节奏舒服</h3>
+                <p>没有把很多宠物挤在同一时间段，等待时间短，进店后就开始护理，对胆子小的狗狗真的特别友好。</p>
+                <span class="review-name">王小姐 · 柯基主人</span>
+              </article>
+            </div>
+
+            <aside class="story-panel">
+              <span class="section-chip" style="color:#f4c59d;">Why Us</span>
+              <h3>我们把“洗护店”做得更像一间让宠物放心的小型护理室。</h3>
+              <p>从香味浓度、吹风距离到预约节奏，我们都尽量降低宠物的陌生压力。主人也能通过清晰的沟通，知道这次护理真正改善了什么。</p>
+              <div class="story-metrics">
+                <div class="metric">
+                  <strong>3000+</strong>
+                  <span>累计服务宠物洗护次数</span>
+                </div>
+                <div class="metric">
+                  <strong>4.9/5</strong>
+                  <span>门店回访满意度</span>
+                </div>
+                <div class="metric">
+                  <strong>1对1</strong>
+                  <span>独立护理节奏安排</span>
+                </div>
+                <div class="metric">
+                  <strong>7天</strong>
+                  <span>常见毛发维护建议周期</span>
+                </div>
+              </div>
+              <a class="button button-secondary" href="#contact">现在预约到店体验</a>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="contact">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="section-chip">Contact</span>
+              <h2>预约一场更安心的洗护</h2>
+            </div>
+            <p>支持电话、微信和到店预约。首次预约建议提前说明宠物品种、年龄、毛发状态和是否怕吹风，我们会帮你安排合适时段。</p>
+          </div>
+          <div class="contact">
+            <article class="contact-card">
+              <h3>到店信息</h3>
+              <p>下面的信息可直接替换成你的真实门店资料。如果你后面愿意，我也可以继续帮你改成具体城市、电话和营业时间版本。</p>
+              <div class="contact-list">
+                <div class="contact-item">
+                  <div class="contact-icon">址</div>
+                  <div>
+                    <strong>门店地址</strong>
+                    <span>武汉市友谊大道徐东路152号</span>
+                  </div>
+                </div>
+                <div class="contact-item">
+                  <div class="contact-icon">电</div>
+                  <div>
+                    <strong>预约电话</strong>
+                    <span>400-800-2026</span>
+                  </div>
+                </div>
+                <div class="contact-item">
+                  <div class="contact-icon">微</div>
+                  <div>
+                    <strong>微信咨询</strong>
+                    <span>RongZhua-PetSpa</span>
+                  </div>
+                </div>
+                <div class="contact-item">
+                  <div class="contact-icon">停</div>
+                  <div>
+                    <strong>停车与到店</strong>
+                    <span>商场地下停车场可停 2 小时，携宠建议从东门宠物通道进入。</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <aside class="hours-card">
+              <h3>营业时间</h3>
+              <p>高峰日建议提前 1 至 2 天预约，周末与节假日时段较满。</p>
+              <div class="schedule">
+                <div class="schedule-row">
+                  <strong>周一至周五</strong>
+                  <span>10:00 - 20:00</span>
+                </div>
+                <div class="schedule-row">
+                  <strong>周六至周日</strong>
+                  <span>09:30 - 21:00</span>
+                </div>
+                <div class="schedule-row">
+                  <strong>猫咪安静时段</strong>
+                  <span>11:00 - 14:00</span>
+                </div>
+              </div>
+              <div class="cta-panel">
+                <strong>预约提示</strong>
+                <p>首次到店可提前 10 分钟到达，方便沟通护理重点；如宠物近期有皮肤问题或打疫苗，请预约时一并说明。</p>
+              </div>
+              <div class="hero-actions" style="margin:24px 0 0;">
+                <a class="button button-primary" href="tel:4008002026">电话预约</a>
+                <a class="button button-secondary" href="mailto:hello@rongzhuapetspa.com">邮件咨询</a>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="section gallery-section" id="environment">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="section-chip">Store Tour</span>
+              <h2>店内环境一览</h2>
+            </div>
+            <p>在网页最下方补上一组店内环境轮播图，分别展示前厅接待区、专业洗护区和休息等候区，整体风格偏中国城市高端宠物洗护门店。</p>
+          </div>
+          <div class="gallery-shell" data-gallery>
+            <div class="gallery-stage">
+              <article class="gallery-slide is-active">
+                <img src="assets/store-lobby.png" alt="高端宠物洗护店前厅接待区">
+                <div class="gallery-overlay">
+                  <h3>前厅接待区</h3>
+                  <p>暖米色与浅石材搭配，入口视觉干净克制，让主人进店第一眼就能感受到轻奢、温和和专业感。</p>
+                </div>
+              </article>
+              <article class="gallery-slide">
+                <img src="assets/store-bathing.png" alt="高端宠物洗护店专业洗护区">
+                <div class="gallery-overlay">
+                  <h3>专业洗护区</h3>
+                  <p>独立洗护池、整洁台面与柔和照明共同构成核心工作区，强调卫生标准与高端护理体验。</p>
+                </div>
+              </article>
+              <article class="gallery-slide">
+                <img src="assets/store-lounge.png" alt="高端宠物洗护店休息等候区">
+                <div class="gallery-overlay">
+                  <h3>休息等候区</h3>
+                  <p>结合精品陈列与休闲座位，保留门店温度，也让等待时间变得更从容、更有品质感。</p>
+                </div>
+              </article>
+            </div>
+            <div class="gallery-controls">
+              <div class="gallery-nav">
+                <button class="gallery-button" type="button" data-gallery-prev aria-label="上一张">‹</button>
+                <button class="gallery-button" type="button" data-gallery-next aria-label="下一张">›</button>
+              </div>
+              <div class="gallery-dots" aria-label="轮播指示器">
+                <button class="gallery-dot is-active" type="button" data-gallery-dot="0" aria-label="查看第 1 张"></button>
+                <button class="gallery-dot" type="button" data-gallery-dot="1" aria-label="查看第 2 张"></button>
+                <button class="gallery-dot" type="button" data-gallery-dot="2" aria-label="查看第 3 张"></button>
+              </div>
+              <div class="gallery-caption">共 3 张环境图，支持自动轮播与手动切换。</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section map-section" id="location">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="section-chip">Map</span>
+              <h2>门店定位</h2>
+            </div>
+            <p>下面这张地图已经按你发来的截图关系重新调整，门店位置对应你箭头指向的点位，并保留了可爱宠物店风格的视觉表达。</p>
+          </div>
+          <div class="map-layout">
+            <article class="map-info">
+              <span class="map-badge">宠物友好到店示意</span>
+              <h3>绒爪洗护 · 武汉徐东店</h3>
+              <p>门店位于武汉市友谊大道徐东路152号，这次的示意图按照你发来的地图重新定位，门店点位落在箭头所指的 `中商徐东平价广场` 一侧区域。</p>
+              <div class="map-address">
+                <strong>武汉市友谊大道徐东路152号</strong>
+                <span>导航时可直接搜索完整地址，也可以先到徐东立交与中商徐东平价广场附近，再按门头和招牌识别门店位置。</span>
+              </div>
+              <div class="map-list">
+                <div class="map-list-item">
+                  <div class="map-list-icon">路</div>
+                  <div>
+                    <strong>主要道路</strong>
+                    <span>地图重点保留了友谊大道、徐东路以及徐东立交的相对走向，让页面里的位置关系更接近你发来的原图。</span>
+                  </div>
+                </div>
+                <div class="map-list-item">
+                  <div class="map-list-icon">找</div>
+                  <div>
+                    <strong>找店方式</strong>
+                    <span>建议先找到中商徐东平价广场，再看箭头指向的一侧街边位置，会比只看楼号更容易快速确认。</span>
+                  </div>
+                </div>
+                <div class="map-list-item">
+                  <div class="map-list-icon">宠</div>
+                  <div>
+                    <strong>温馨提示</strong>
+                    <span>带宠到店时尽量避开高峰堵车时段，提前一点出发，宠物状态会更轻松一些。</span>
+                  </div>
+                </div>
+              </div>
+              <div class="hero-actions" style="margin:24px 0 0;">
+                <button class="button button-primary map-copy" type="button" data-copy-address>复制门店地址</button>
+                <a class="button button-secondary" href="#contact">返回预约区域</a>
+              </div>
+              <p class="map-note">提示：这是风格化到店示意图，重点用于页面展示与方向感传达，不替代专业导航地图。</p>
+            </article>
+
+            <aside class="map-visual">
+              <h3>AI 绘制地图</h3>
+              <p>这版地图由 AI 按你提供的截图重新绘制，保留徐东片区的核心道路、商场和箭头定位关系，并做成更柔和的宠物店视觉。</p>
+              <div class="map-stage">
+                <img class="pet-route-map" src="assets/store-map-ai.png" alt="AI 绘制的武汉市友谊大道徐东路152号宠物店定位地图">
+              </div>
+              <div class="map-legend">
+                <p>红色箭头和爪印定位对应你截图里标出的门店位置，点位落在中商徐东平价广场一侧。</p>
+                <span class="legend-pill">风格化示意地图</span>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <span>© 2026 绒爪洗护 Pet Spa. 单页展示站.</span>
+        <span>温柔洗护，清爽到家。</span>
+      </div>
+    </footer>
+
+    <a class="floating-book" href="#contact">预约洗护</a>
+  </div>
+
+  <script>
+    const navToggle = document.querySelector(".nav-toggle");
+    const nav = document.querySelector(".nav");
+    const navLinks = document.querySelectorAll(".nav a");
+    const gallery = document.querySelector("[data-gallery]");
+    const slides = gallery ? Array.from(gallery.querySelectorAll(".gallery-slide")) : [];
+    const dots = gallery ? Array.from(gallery.querySelectorAll(".gallery-dot")) : [];
+    const prevButton = gallery ? gallery.querySelector("[data-gallery-prev]") : null;
+    const nextButton = gallery ? gallery.querySelector("[data-gallery-next]") : null;
+    const copyAddressButton = document.querySelector("[data-copy-address]");
+    let galleryIndex = 0;
+    let galleryTimer = null;
+
+    if (navToggle && nav) {
+      navToggle.addEventListener("click", () => {
+        const isOpen = nav.classList.toggle("is-open");
+        navToggle.classList.toggle("is-open", isOpen);
+        navToggle.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      navLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          nav.classList.remove("is-open");
+          navToggle.classList.remove("is-open");
+          navToggle.setAttribute("aria-expanded", "false");
+        });
+      });
+
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 820) {
+          nav.classList.remove("is-open");
+          navToggle.classList.remove("is-open");
+          navToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    if (gallery && slides.length) {
+      const setSlide = (nextIndex) => {
+        galleryIndex = (nextIndex + slides.length) % slides.length;
+
+        slides.forEach((slide, index) => {
+          slide.classList.toggle("is-active", index === galleryIndex);
+        });
+
+        dots.forEach((dot, index) => {
+          dot.classList.toggle("is-active", index === galleryIndex);
+        });
+      };
+
+      const startGallery = () => {
+        if (galleryTimer) {
+          clearInterval(galleryTimer);
+        }
+
+        galleryTimer = window.setInterval(() => {
+          setSlide(galleryIndex + 1);
+        }, 4800);
+      };
+
+      prevButton?.addEventListener("click", () => {
+        setSlide(galleryIndex - 1);
+        startGallery();
+      });
+
+      nextButton?.addEventListener("click", () => {
+        setSlide(galleryIndex + 1);
+        startGallery();
+      });
+
+      dots.forEach((dot, index) => {
+        dot.addEventListener("click", () => {
+          setSlide(index);
+          startGallery();
+        });
+      });
+
+      gallery.addEventListener("mouseenter", () => {
+        if (galleryTimer) {
+          clearInterval(galleryTimer);
+        }
+      });
+
+      gallery.addEventListener("mouseleave", () => {
+        startGallery();
+      });
+
+      startGallery();
+    }
+
+    if (copyAddressButton) {
+      copyAddressButton.addEventListener("click", async () => {
+        const originalLabel = copyAddressButton.textContent;
+
+        try {
+          await navigator.clipboard.writeText("武汉市友谊大道徐东路152号");
+          copyAddressButton.textContent = "地址已复制";
+
+          window.setTimeout(() => {
+            copyAddressButton.textContent = originalLabel;
+          }, 1800);
+        } catch (error) {
+          copyAddressButton.textContent = "复制失败，请手动复制";
+
+          window.setTimeout(() => {
+            copyAddressButton.textContent = originalLabel;
+          }, 2200);
+        }
+      });
+    }
+  </script>
+</body>
+</html>

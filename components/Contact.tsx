@@ -114,14 +114,21 @@ export function Contact() {
               </label>
               <label className="block font-bold">
                 预约日期
-                <input className={fields} name="date" type="date" required />
+                <input
+                  className={fields}
+                  name="date"
+                  type="date"
+                  defaultValue="2026-05-15"
+                  required
+                />
               </label>
               <label className="block font-bold">
                 期望时段
-                <select className={fields} name="timeSlot" defaultValue="" required>
+                <select className={fields} name="timeSlot" defaultValue="09:30" required>
                   <option value="" disabled>
                     请选择到店时段
                   </option>
+                  <option value="09:30">09:30</option>
                   <option>10:00 - 12:00</option>
                   <option>12:00 - 14:00</option>
                   <option>14:00 - 17:00</option>
